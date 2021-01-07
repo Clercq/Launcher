@@ -3,6 +3,7 @@ package pro.gravit.launchserver.socket.response.auth;
 import io.netty.channel.ChannelHandlerContext;
 import pro.gravit.launcher.events.request.AuthRequestEvent;
 import pro.gravit.launcher.request.auth.AuthRequest;
+import pro.gravit.launcher.request.auth.password.Auth2FAPassword;
 import pro.gravit.launcher.request.auth.password.AuthECPassword;
 import pro.gravit.launcher.request.auth.password.AuthPlainPassword;
 import pro.gravit.launchserver.auth.AuthException;
@@ -53,6 +54,16 @@ public class AuthResponse extends SimpleResponse {
                 try {
                     password = new AuthPlainPassword(IOHelper.decode(SecurityHelper.decrypt(server.runtime.passwordEncryptKey
                             , ((AuthECPassword) password).password)));
+                } catch (IllegalBlockSizeException | BadPaddingException ignored) {
+                    throw new AuthException("Password decryption error");
+                }
+            }
+            if (password instanceof Auth2FAPassword){
+                try {
+                    if(((Auth2FAPassword) password).firstPassword instanceof AuthECPassword) {
+                        ((Auth2FAPassword) password).firstPassword = new AuthPlainPassword(IOHelper.decode(SecurityHelper.decrypt(server.runtime.passwordEncryptKey
+                                , ((AuthECPassword) (((Auth2FAPassword) password).firstPassword)).password)));
+                    }
                 } catch (IllegalBlockSizeException | BadPaddingException ignored) {
                     throw new AuthException("Password decryption error");
                 }

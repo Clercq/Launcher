@@ -1,6 +1,7 @@
 package pro.gravit.launchserver.auth.provider;
 
 import pro.gravit.launcher.ClientPermissions;
+import pro.gravit.launcher.events.request.GetAvailabilityAuthRequestEvent;
 import pro.gravit.launcher.request.auth.AuthRequest;
 import pro.gravit.launcher.request.auth.password.AuthPlainPassword;
 import pro.gravit.launchserver.LaunchServer;
@@ -28,6 +29,11 @@ public final class MySQLAuthProvider extends AuthProvider {
         if (query == null) LogHelper.error("[Verify][AuthProvider] query cannot be null");
         if (message == null) LogHelper.error("[Verify][AuthProvider] message cannot be null");
         if (mySQLHolder == null) LogHelper.error("[Verify][AuthProvider] mySQLHolder cannot be null");
+    }
+
+    @Override
+    public GetAvailabilityAuthRequestEvent.AuthAvailability.AuthType getSecondAuthType() {
+        return GetAvailabilityAuthRequestEvent.AuthAvailability.AuthType.TOTP;
     }
 
     @Override

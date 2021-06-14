@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import pro.gravit.launchserver.auth.protect.interfaces.SecureProtectHandler;
 import pro.gravit.launchserver.socket.Client;
 import pro.gravit.launchserver.socket.response.SimpleResponse;
+import pro.gravit.utils.helper.LogHelper;
 
 import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
@@ -25,6 +26,10 @@ public class VerifySecureLevelKeyResponse extends SimpleResponse {
         }
         SecureProtectHandler secureProtectHandler = (SecureProtectHandler) server.config.protectHandler;
         try {
+            for(byte some : publicKey){
+                System.out.print(some + " ");
+            }
+            System.out.println();
             secureProtectHandler.verifySecureLevelKey(publicKey, client.trustLevel.verifySecureKey, signature);
         } catch (InvalidKeySpecException e) {
             sendError("Invalid public key");

@@ -11,6 +11,7 @@ local.properties
 .loadpath
 .recommenders
 tst/
+jdk-11.0.9.1-full/
 
 # External tool builders
 .externalToolBuilders/
@@ -110,3 +111,4 @@ cmd.sh
 project/target
 ## PVS Studio
 .PVS-Studio/
+gradle.properties

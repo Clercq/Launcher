@@ -75,13 +75,15 @@ public class LauncherResponse extends SimpleResponse {
                 System.out.println(Base64.getEncoder().encodeToString(XORKey));
 
                 String signatureEncoded = new String(signature, StandardCharsets.UTF_8);
-
-                if (signatureEncoded.equals(sha256Encrypt(XORCrypto(XORKey)))) {
+                System.out.println(sha256Encrypt(XORCrypto(XORKey)));
+                if (signatureEncoded.equalsIgnoreCase(sha256Encrypt(XORCrypto(XORKey)))) {
                     client.checkSign = true;
                     sendResult(new LauncherRequestEvent(false, server.config.netty.launcherEXEURL));
                 } else {
                     sendResultAndClose(new LauncherRequestEvent(true, server.config.netty.launcherEXEURL));
                 }
+            } else {
+                sendError("Request launcher type error");
             }
         } else sendError("Request launcher type error");
     }
